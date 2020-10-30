@@ -136,7 +136,7 @@ def telemetry(sid, data):
             #     bb = 0
             bb = np.array([bb])
             # print('*****************************************************')
-            steering_angle = 0# float(model.predict([image1, bb], batch_size=1)) * 25
+            steering_angle = float(model.predict([image1, bb], batch_size=1)) * 25
             # img = model2.predict(image1,batch_size=1)[0]
             # for c in range(3):
             #     image[:,:,c] = np.where(img[:,:,0] == 0, image[:,:,c], image[:,:,c]* 0.3 + color[c] *-0.7)
