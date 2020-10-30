@@ -65,12 +65,8 @@ sio = socketio.Server()
 # our flask (web) app
 app = Flask(__name__)
 
-# Tốc độ tối thiểu và tối đa của xe
-MAX_SPEED = 40
-MIN_SPEED = 40
-
-# Tốc độ thời điểm ban đầu
-speed_limit = MAX_SPEED
+bbn = 0
+tt = 0
 
 fps = 30
 file_name = "UIT_car_vong1.avi"
@@ -111,7 +107,6 @@ def telemetry(sid, data):
         sendBack_Speed = 0
         if True:
             # ------------------------------------------  Work space  ----------------------------------------------#
-            # image = utils.preprocess(image)
             bb=0
             if TRAFFIC_SIGN[6]==1 or TRAFFIC_SIGN[1]==1 or TRAFFIC_SIGN[2]==1 or TRAFFIC_SIGN[8]==1 or TRAFFIC_SIGN[8]==1 or (TRAFFIC_SIGN[8]==1 and TRAFFIC_SIGN[5]==1) or( TRAFFIC_SIGN[8]==1 and TRAFFIC_SIGN[3]==1):
                 bb = 0
@@ -125,29 +120,24 @@ def telemetry(sid, data):
 
             image = cv2.resize(image0[100:,:,:],(128, 64), cv2.INTER_AREA)
             image1 = np.array([image])
-            #cv2.imshow('image', image)
-            #n = int(cv2.waitKey(1))
-            #print(bb)
-            # if n==ord('1'):
-            #     bb = 1
-            # elif n==ord('2'):
-            #     bb = 2
-            # else:
-            #     bb = 0
-            bb = np.array([bb])
+            
+            global nnb, tt
+            if bbn == 0:
+                bbn = bb
+                
+            x = np.array([bbn])
             # print('*****************************************************')
-            steering_angle = float(model.predict([image1, bb], batch_size=1)) * 25
-            # img = model2.predict(image1,batch_size=1)[0]
-            # for c in range(3):
-            #     image[:,:,c] = np.where(img[:,:,0] == 0, image[:,:,c], image[:,:,c]* 0.3 + color[c] *-0.7)
-            # print (img.shape)
-            # cv2.imshow('mask', image)
-            # if cv2.waitKey(1):
-            #     pass
-
+            steering_angle = float(model.predict([image1, x], batch_size=1)) * 25
+            
+            if tt == 1 and steering_angle < 5:
+                tt = 0
+                bbn = 0
+            if steering_angle > 13:
+                tt = 1
+                
             sendBack_Speed = (10 - 0.0096*(steering_angle**2) - speed) * 70
 
-            # print(speed, steering_angle)
+            print(bbn)
             # ------------------------------------------------------------------------------------------------------#
             # print('{} : {}'.format(sendBack_angle, sendBack_Speed))
             send_control(steering_angle, sendBack_Speed)
