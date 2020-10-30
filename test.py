@@ -103,7 +103,7 @@ def telemetry(sid, data):
         if True:
             # ------------------------------------------  Work space  ----------------------------------------------#
             bb=0
-            if TRAFFIC_SIGN[6]==1 or TRAFFIC_SIGN[1]==1 or TRAFFIC_SIGN[2]==1 or TRAFFIC_SIGN[8]==1 or TRAFFIC_SIGN[8]==1 or (TRAFFIC_SIGN[8]==1 and TRAFFIC_SIGN[5]==1) or( TRAFFIC_SIGN[8]==1 and TRAFFIC_SIGN[3]==1):
+            if TRAFFIC_SIGN[6]==1 or TRAFFIC_SIGN[1]==1 or TRAFFIC_SIGN[2]==1 or TRAFFIC_SIGN[8]==1:
                 bb = 0
 
             if TRAFFIC_SIGN[0]==1 or TRAFFIC_SIGN[3]==1:
@@ -111,6 +111,7 @@ def telemetry(sid, data):
 
             if TRAFFIC_SIGN[5]==1 or TRAFFIC_SIGN[4]==1:
                 bb = 2
+                
             detect_traff(orig_image)
 
             image = cv2.resize(image0[90:,:,:],(128, 64), cv2.INTER_AREA)
@@ -129,8 +130,12 @@ def telemetry(sid, data):
                 bbn = 0
             if steering_angle > 13:
                 tt = 1
-                
-            sendBack_Speed = (10 - 0.0096*(steering_angle**2) - speed) * 70
+            
+            if bbn != 0:
+                a = 5
+            else:
+                a = 0
+            sendBack_Speed = (30 - 0.032*(steering_angle**2) - speed - a) * 70
 
             print(bbn)
             # ------------------------------------------------------------------------------------------------------#
