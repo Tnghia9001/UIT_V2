@@ -85,9 +85,7 @@ def telemetry(sid, data):
         # Original Image
         image = Image.open(BytesIO(base64.b64decode(data["image"])))
         image0 = np.asarray(image)
-        orig_image = image0.copy()
-       
-        vwriter.write(image0.astype(dtype=np.uint8))
+        orig_image = image0.copy())
         """
         - Chương trình đưa cho bạn 3 giá trị đầu vào:
             * steering_angle: góc lái hiện tại của xe
@@ -115,7 +113,7 @@ def telemetry(sid, data):
                 bb = 2
             detect_traff(orig_image)
 
-            image = cv2.resize(image0[100:,:,:],(128, 64), cv2.INTER_AREA)
+            image = cv2.resize(image0[90:,:,:],(128, 64), cv2.INTER_AREA)
             image1 = np.array([image])
             
             global bbn, tt
