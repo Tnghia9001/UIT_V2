@@ -144,11 +144,6 @@ def telemetry(sid, data):
             # cv2.imshow('mask', image)
             # if cv2.waitKey(1):
             #     pass
-            global speed_limit
-            if speed > speed_limit:
-                speed_limit = MIN_SPEED  # giảm tốc độ
-            else:
-                speed_limit = MAX_SPEED
 
             sendBack_Speed = (10 - 0.0096*(steering_angle**2) - speed) * 70
 
