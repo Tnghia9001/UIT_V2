@@ -27,9 +27,9 @@ import torch
 import tensorflow as tf
 ######################3 Bien bao
 
-ROOT = str(os.path.dirname(os.path.abspath(__file__)))
-model_path =  "models/mb2-ssd-lite-Epoch-505-Loss-1.20.pth"
-label_path = "models/open-images-model-labels.txt"
+ROOT = "UIT_V2"
+model_path =  ROOT + "/models/mb2-ssd-lite-Epoch-505-Loss-1.20.pth"
+label_path = ROOT + "/models/open-images-model-labels.txt"
 class_names = [name.strip() for name in open(label_path).readlines()]
 num_classes = len(class_names)
 net = create_mobilenetv2_ssd_lite(len(class_names), is_test=True)
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     # -----------------------------------  Setup  ------------------------------------------#
     from model.Angle_model_v3 import Angle_model_v3
     model = Angle_model_v3((64,128,3)).build()
-    model.load_weights('model-ang.h5')
+    model.load_weights(ROOT + '/model-ang.h5')
     # --------------------------------------------------------------------------------------#
     # wrap Flask application with engineio's middleware
     app = socketio.Middleware(sio, app)
