@@ -125,9 +125,9 @@ def telemetry(sid, data):
 
             image = cv2.resize(image0[100:,:,:],(128, 64), cv2.INTER_AREA)
             image1 = np.array([image])
-            cv2.imshow('image', image)
-            n = int(cv2.waitKey(1))
-            print(bb)
+            #cv2.imshow('image', image)
+            #n = int(cv2.waitKey(1))
+            #print(bb)
             # if n==ord('1'):
             #     bb = 1
             # elif n==ord('2'):
@@ -238,8 +238,8 @@ def detect_traff(image):
                 TRAFFIC_SIGN_TIME[j] =-1
     # print(TRAFFIC_SIGN)
 
-    cv2.imshow('Traf', orig_image)
-    n = int(cv2.waitKey(1))
+    #cv2.imshow('Traf', orig_image)
+    #n = int(cv2.waitKey(1))
 
 
 if __name__ == '__main__':
