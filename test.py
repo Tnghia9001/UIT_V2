@@ -28,8 +28,8 @@ import tensorflow as tf
 ######################3 Bien bao
 
 ROOT = str(os.path.dirname(os.path.abspath(__file__)))
-model_path =  "models\\mb2-ssd-lite-Epoch-505-Loss-1.20.pth"
-label_path = "models\\open-images-model-labels.txt"
+model_path =  "models/mb2-ssd-lite-Epoch-505-Loss-1.20.pth"
+label_path = "models/open-images-model-labels.txt"
 class_names = [name.strip() for name in open(label_path).readlines()]
 num_classes = len(class_names)
 net = create_mobilenetv2_ssd_lite(len(class_names), is_test=True)
