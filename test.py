@@ -68,9 +68,6 @@ app = Flask(__name__)
 bbn = 0
 tt = 0
 
-fps = 30
-file_name = "UIT_car_vong1.avi"
-vwriter = cv2.VideoWriter(file_name,cv2.VideoWriter_fourcc(*'FMP4'), fps, (320, 180))
 IMAGE = None
 color = [100, 200, 100]
 # registering event handler for the server
@@ -121,7 +118,7 @@ def telemetry(sid, data):
             image = cv2.resize(image0[100:,:,:],(128, 64), cv2.INTER_AREA)
             image1 = np.array([image])
             
-            global nnb, tt
+            global bbn, tt
             if bbn == 0:
                 bbn = bb
                 
