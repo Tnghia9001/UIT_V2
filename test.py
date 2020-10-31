@@ -85,7 +85,7 @@ def telemetry(sid, data):
         # Original Image
         image = Image.open(BytesIO(base64.b64decode(data["image"])))
         image0 = np.asarray(image)
-        orig_image = image0.copy())
+        orig_image = image0.copy()
         """
         - Chương trình đưa cho bạn 3 giá trị đầu vào:
             * steering_angle: góc lái hiện tại của xe
@@ -128,7 +128,7 @@ def telemetry(sid, data):
             if tt == 1 and steering_angle < 5:
                 tt = 0
                 bbn = 0
-            if steering_angle > 13:
+            if steering_angle > 13 and bbn != 0:
                 tt = 1
             
             if bbn != 0:
