@@ -147,7 +147,7 @@ def telemetry(sid, data):
                 if bbn != 0:
                     sendBack_Speed = (10 - 0.008 * (steering_angle ** 2) - speed) * 30
                 else:
-                    sendBack_Speed = (30 - 0.032 * (steering_angle ** 2) - speed) * 70
+                    sendBack_Speed = (20 - 0.016 * (steering_angle ** 2) - speed) * 70
 
         # print(bbn)
         # ------------------------------------------------------------------------------------------------------#
