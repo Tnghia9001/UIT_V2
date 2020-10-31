@@ -1,10 +1,7 @@
 BACKGROUND
 cod_0
-cod_1
-cod_2
 cod_3
 cod_4
 cod_5
-cod_6
 cod_7
 cod_8
