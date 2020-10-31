@@ -83,7 +83,7 @@ def telemetry(sid, data):
         # Original Image
         image = Image.open(BytesIO(base64.b64decode(data["image"])))
         image0 = np.asarray(image)
-        #detect_traff(image0)
+        detect_traff(image0)
         orig_image = image0.copy()
         """
         - Chương trình đưa cho bạn 3 giá trị đầu vào:
@@ -128,7 +128,7 @@ def telemetry(sid, data):
 
             x = np.array([bbn])
             # print('*****************************************************')
-            image0 = cv2.resize(image0, (128, 64), cv2.INTER_AREA)
+            image0 = cv2.resize(image0[100:,:,:], (128, 64), cv2.INTER_AREA)
             image0 = np.array([image0])
             steering_angle = float(model.predict([image0, x], batch_size=1)) * 25
 
@@ -212,15 +212,15 @@ def detect_traff(image):
                 TRAFFIC_SIGN_NEW[8] = 1
             box = boxes[i, :]
 
-            label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
-            cv2.rectangle(orig_image, (box[0], box[1]), (box[2], box[3]), (255, 255, 0), 4)
+            #label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
+            #cv2.rectangle(orig_image, (box[0], box[1]), (box[2], box[3]), (255, 255, 0), 4)
 
-            cv2.putText(orig_image, label,
-                        (box[0] + 20, box[1] + 40),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        1,  # font scale
-                        (255, 0, 255),
-                        2)  # line type
+#            cv2.putText(orig_image, label,
+#                         (box[0] + 20, box[1] + 40),
+#                         cv2.FONT_HERSHEY_SIMPLEX,
+#                         1,  # font scale
+#                         (255, 0, 255),
+#                         2)  # line type
         for j, flag in enumerate(TRAFFIC_SIGN_NEW):
             if flag == 0 and TRAFFIC_SIGN[j] == 1:
                 _ct = int(time.time() * 1000)
