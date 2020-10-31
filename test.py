@@ -128,7 +128,7 @@ def telemetry(sid, data):
 
             x = np.array([bbn])
             # print('*****************************************************')
-            image0 = cv2.resize(image0[100:,:,:], (128, 64), cv2.INTER_AREA)
+            image0 = cv2.resize(image0[90:,:,:], (128, 64), cv2.INTER_AREA)
             image0 = np.array([image0])
             steering_angle = float(model.predict([image0, x], batch_size=1)) * 25
 
