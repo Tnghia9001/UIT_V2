@@ -25,7 +25,7 @@ import tensorflow as tf
 ######################3 Bien bao
 
 ROOT = ""#os.path.dirname(os.path.abspath(__file__))+'/'
-model_path = ROOT + "models/mb2-ssd-lite-Epoch-125-Loss-1.09.pth"
+model_path = ROOT + "models/mb2-ssd-lite-Epoch-325-Loss-1.11.pth"
 label_path = ROOT + "models/open-images-model-labels.txt"
 class_names = [name.strip() for name in open(label_path).readlines()]
 num_classes = len(class_names)
