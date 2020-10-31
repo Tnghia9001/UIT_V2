@@ -125,7 +125,7 @@ def telemetry(sid, data):
 
         if tt == 1 and steering_angle < 5:
             tt = 0
-        bbn = 0
+            bbn = 0
         if steering_angle > 13 and bbn != 0:
             tt = 1
 
