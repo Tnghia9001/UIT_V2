@@ -24,8 +24,8 @@ import tensorflow as tf
 
 ######################3 Bien bao
 
-ROOT = ""
-model_path = ROOT + "models/mb2-ssd-lite-Epoch-505-Loss-1.20.pth"
+ROOT = os.path.dirname(os.path.abspath(__file__))+'/'
+model_path = ROOT + "models/mb2-ssd-lite-Epoch-325-Loss-1.11.pth"
 label_path = ROOT + "models/open-images-model-labels.txt"
 class_names = [name.strip() for name in open(label_path).readlines()]
 num_classes = len(class_names)
@@ -63,7 +63,7 @@ app = Flask(__name__)
 
 bbn = 0
 tt = 0
-
+stop = 0
 IMAGE = None
 color = [100, 200, 100]
 
@@ -71,7 +71,7 @@ color = [100, 200, 100]
 # registering event handler for the server
 @sio.on('telemetry')
 def telemetry(sid, data):
-    global folder_name, count, save, TRAFFIC_SIGN, TRAFFIC_SIGN_TIME, TIME_DEFF, TIME_DE, TIME_DE_D, IMAGE
+    global folder_name, count, save, TRAFFIC_SIGN, TRAFFIC_SIGN_TIME, TIME_DEFF, TIME_DE, TIME_DE_D, IMAGE, bbn, tt, stop
     if data:
 
         steering_angle = 0  # Góc lái hiện tại của xe
@@ -83,6 +83,7 @@ def telemetry(sid, data):
         # Original Image
         image = Image.open(BytesIO(base64.b64decode(data["image"])))
         image0 = np.asarray(image)
+        #detect_traff(image0)
         orig_image = image0.copy()
         """
         - Chương trình đưa cho bạn 3 giá trị đầu vào:
@@ -101,41 +102,54 @@ def telemetry(sid, data):
         if True:
         # ------------------------------------------  Work space  ----------------------------------------------#
             bb = 0
-        if TRAFFIC_SIGN[6] == 1 or TRAFFIC_SIGN[1] == 1 or TRAFFIC_SIGN[2] == 1 or TRAFFIC_SIGN[8] == 1:
-            bb = 0
+            if TRAFFIC_SIGN[6] == 1 or TRAFFIC_SIGN[1] == 1 or TRAFFIC_SIGN[2] == 1 or TRAFFIC_SIGN[8] == 1 or TRAFFIC_SIGN[3] == 1 or TRAFFIC_SIGN[5] == 1:
+                bb = 0
 
-        if TRAFFIC_SIGN[0] == 1 or TRAFFIC_SIGN[3] == 1:
-            bb = 1
+            if TRAFFIC_SIGN[0] == 1 :
+                bb = 1
 
-        if TRAFFIC_SIGN[5] == 1 or TRAFFIC_SIGN[4] == 1:
-            bb = 2
+            if TRAFFIC_SIGN[4] == 1:
+                bb = 2
 
-        detect_traff(orig_image)
+            # bb = 0
+            # if n==ord('1'):
+            #     bb = 1
+            # elif n==ord('2'):
+            #     bb = 2
+            # elif n == ord('s'):
+            #     stop = 2
+            # elif n == ord('d'):
+            #     stop = 1
+            # else:
+            #     bb = 0
 
-        image = cv2.resize(image0[90:, :, :], (128, 64), cv2.INTER_AREA)
-        image1 = np.array([image])
+            if bbn == 0:
+                bbn = bb
 
-        global bbn, tt
-        if bbn == 0:
-            bbn = bb
+            x = np.array([bbn])
+            # print('*****************************************************')
+            image0 = cv2.resize(image0, (128, 64), cv2.INTER_AREA)
+            image0 = np.array([image0])
+            steering_angle = float(model.predict([image0, x], batch_size=1)) * 25
 
-        x = np.array([bbn])
-        # print('*****************************************************')
-        steering_angle = float(model.predict([image1, x], batch_size=1)) * 25
+            if tt == 1 and abs(steering_angle) < 5 and bbn != 0:
+                tt = 0
+                bbn = 0
+            print ("bbn: ", bbn)
+            if abs(steering_angle) > 13 and bbn != 0:
+                tt = 1
+            print ('tt: ', tt)
+            if stop == 2:
+                sendBack_Speed = (5 - speed) * 30
+            elif stop == 1:
+                sendBack_Speed = (0 - speed) * 100
+            else:
+                if bbn != 0:
+                    sendBack_Speed = (5 - 0.004 * (steering_angle ** 2) - speed) * 30
+                else:
+                    sendBack_Speed = (10 - 0.016 * (steering_angle ** 2) - speed) * 70
 
-        if tt == 1 and steering_angle < 5:
-            tt = 0
-            bbn = 0
-        if steering_angle > 13 and bbn != 0:
-            tt = 1
-
-        if bbn != 0:
-            a = 5
-        else:
-            a = 0
-        sendBack_Speed = (30 - 0.032 * (steering_angle ** 2) - speed - a) * 70
-
-        print(bbn)
+        # print(bbn)
         # ------------------------------------------------------------------------------------------------------#
         # print('{} : {}'.format(sendBack_angle, sendBack_Speed))
         send_control(steering_angle, sendBack_Speed)
@@ -229,7 +243,7 @@ if __name__ == '__main__':
     from model.Angle_model_v3 import Angle_model_v3
 
     model = Angle_model_v3((64, 128, 3)).build()
-    model.load_weights(ROOT + 'model-ang.h5')
+    model.load_weights(ROOT + 'model-107.h5')
     # --------------------------------------------------------------------------------------#
     # wrap Flask application with engineio's middleware
     app = socketio.Middleware(sio, app)
