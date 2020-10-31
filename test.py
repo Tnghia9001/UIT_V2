@@ -243,7 +243,7 @@ if __name__ == '__main__':
     from model.Angle_model_v3 import Angle_model_v3
 
     model = Angle_model_v3((64, 128, 3)).build()
-    model.load_weights(ROOT + 'model-107.h5')
+    model.load_weights(ROOT + 'model-086.h5')
     # --------------------------------------------------------------------------------------#
     # wrap Flask application with engineio's middleware
     app = socketio.Middleware(sio, app)
